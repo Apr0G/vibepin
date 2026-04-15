@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vibepin — shop your aesthetic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:      #E60023;
+      --red-dark: #AD081B;
+      --black:    #111111;
+      --offblack: #1A1A1A;
+      --gray:     #888;
+      --light:    #F0E8E4;
+      --cream:    #FDF7F4;
+      --white:    #FFFFFF;
+      --border:   #E4D8D2;
+    }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 62px; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--black);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(253,247,244,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 56px; height: 62px;
+    }
+    .nav-right { justify-self: end; }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--red); text-decoration: none; letter-spacing: -0.3px;
+    }
+    .logo em { font-style: italic; }
+    .nav-links { display: flex; gap: 0; list-style: none; align-items: center; }
+    .nav-links li + li::before { content: '—'; color: var(--gray); margin: 0 20px; font-size: 0.75rem; }
+    .nav-links a {
+      font-size: 0.875rem; font-weight: 400; color: var(--gray);
+      text-decoration: none; transition: color 0.2s; letter-spacing: 0.1px;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-right { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      padding: 8px 20px; border-radius: 100px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.83rem; font-weight: 500; cursor: pointer; text-decoration: none;
+      transition: all 0.2s; display: inline-block;
+    }
+    .btn-ghost { background: transparent; color: var(--gray); border: 1.5px solid var(--border); }
+    .btn-ghost:hover { color: var(--black); border-color: var(--black); }
+    .btn-red { background: var(--red); color: white; border: 1.5px solid var(--red); }
+    .btn-red:hover { background: var(--red-dark); }
+
+    /* ── HERO ── */
+    .hero {
+      display: grid; grid-template-columns: 1fr 1fr;
+      height: calc(100vh - 62px);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-left {
+      padding: 40px 64px;
+      display: flex; flex-direction: column; justify-content: center;
+      border-right: 1px solid var(--border);
+      background-image: radial-gradient(circle, rgba(0,0,0,0.055) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 5vw, 5.2rem);
+      line-height: 1.06; font-weight: 700; letter-spacing: -1.5px;
+      margin-bottom: 16px;
+    }
+    h1 em { font-style: italic; color: var(--red); }
+    .hero-sub {
+      font-size: 1rem; color: var(--gray);
+      max-width: 450px; line-height: 1.78; margin-bottom: 28px;
+    }
+    .hero-cta {
+      padding: 14px 32px; background: var(--red); color: white;
+      border: none; border-radius: 100px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem; font-weight: 600; cursor: pointer;
+      text-decoration: none; display: inline-block;
+      transition: all 0.2s; width: fit-content;
+    }
+    .hero-cta:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(230,0,35,.22); }
+
+    /* Hero right — pin board */
+    .hero-right {
+      background: var(--light); position: relative; overflow: hidden;
+      background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .hero-right::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 100px; pointer-events: none;
+      background: linear-gradient(transparent, var(--light));
+    }
+    .pin-board {
+      padding: 28px;
+      display: flex;
+      gap: 10px;
+      height: 100%;
+      overflow: hidden;
+    }
+    .pin-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+    }
+    .pin {
+      border-radius: 14px; overflow: hidden; position: relative;
+      cursor: pointer; transition: transform 0.25s; flex-shrink: 0;
+    }
+    .pin:hover { transform: scale(1.02); }
+
+    .ph1 { background: linear-gradient(160deg,#F5D5D8,#E0A0B0); aspect-ratio: 2/3; display: block; }
+    .ph2 { background: linear-gradient(160deg,#C8C0E0,#A098C8); aspect-ratio: 3/4; display: block; }
+    .ph3 { background: linear-gradient(160deg,#C5E0C8,#90C098); aspect-ratio: 1/1; display: block; }
+    .ph4 { background: linear-gradient(160deg,#F0DEB5,#E0C080); aspect-ratio: 3/4; display: block; }
+    .ph5 { background: linear-gradient(160deg,#B0D0F0,#78B0E8); aspect-ratio: 3/4; display: block; }
+    .ph6 { background: linear-gradient(160deg,#F0C0D0,#D88098); aspect-ratio: 9/11; display: block; }
+    .ph7 { background: linear-gradient(160deg,#C8E0C0,#98C888); aspect-ratio: 3/4; display: block; }
+    .ph8 { background: linear-gradient(160deg,#F0D0B5,#E0A878); aspect-ratio: 2/3; display: block; }
+    .ph9 { background: linear-gradient(160deg,#F0D0B5,#e6bb95); aspect-ratio: 1/1; display: block; }
+
+    .pin-price {
+      position: absolute; bottom: 10px; left: 10px;
+      background: rgba(255,255,255,0.9); border-radius: 8px;
+      padding: 3px 9px; font-size: 0.68rem; font-weight: 700;
+      color: var(--black); backdrop-filter: blur(6px);
+    }
+    .pin-found {
+      position: absolute; top: 10px; right: 10px;
+      background: var(--red); border-radius: 6px;
+      padding: 2px 7px; font-size: 0.6rem; font-weight: 700; color: white;
+    }
+
+    .board-badge {
+      position: absolute; bottom: 28px; left: -14px;
+      background: white; border: 1.5px solid var(--border);
+      border-radius: 14px; padding: 12px 18px;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.1);
+      font-size: 0.8rem;
+    }
+    .board-badge strong { display: block; font-weight: 600; margin-bottom: 1px; }
+    .board-badge span { color: var(--gray); font-size: 0.72rem; }
+
+    /* ── SECTION SHARED ── */
+    .section { padding: 100px 56px; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .label {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--red); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .label::before { content: ''; width: 20px; height: 1.5px; background: var(--red); }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 700;
+      line-height: 1.1; letter-spacing: -0.5px; margin-bottom: 16px;
+    }
+    h2 em { font-style: italic; color: var(--red); }
+    .sub {
+      font-size: 0.95rem; color: var(--gray);
+      line-height: 1.75; max-width: 420px;
+    }
+
+    /* ── FIND ── */
+    #find { background: var(--cream); }
+    #find .section-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+
+    .upload-zone {
+      margin-top: 36px;
+      background: var(--white); border: 2px dashed var(--border);
+      border-radius: 20px; padding: 40px 32px; text-align: center;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .upload-zone:hover { border-color: var(--red); }
+    .upload-icon {
+      width: 50px; height: 50px; background: var(--light); border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin: 0 auto 16px;
+    }
+    .upload-zone h3 { font-size: 0.92rem; font-weight: 600; margin-bottom: 6px; }
+    .upload-zone p { font-size: 0.8rem; color: var(--gray); margin-bottom: 20px; }
+    .btn-upload {
+      padding: 9px 24px; background: var(--red); color: white; border: none;
+      border-radius: 100px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-upload:hover { background: var(--red-dark); }
+    .or-row {
+      display: flex; align-items: center; gap: 12px;
+      margin: 18px 0; font-size: 0.73rem; color: var(--gray);
+    }
+    .or-row::before, .or-row::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .url-row { display: flex; gap: 8px; }
+    .url-input {
+      flex: 1; padding: 10px 16px; border: 1.5px solid var(--border);
+      border-radius: 100px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem; outline: none; background: var(--cream); transition: border-color 0.2s;
+    }
+    .url-input:focus { border-color: var(--red); }
+    .url-input::placeholder { color: #C0B0AA; }
+    .btn-go {
+      padding: 10px 20px; background: var(--black); color: white; border: none;
+      border-radius: 100px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-go:hover { background: var(--red); }
+
+    /* Results */
+    .results-label {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--gray); margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .results-label span { color: var(--red); font-style: italic; font-weight: 400;
+      letter-spacing: 0; text-transform: none; font-size: 0.78rem; }
+    .result-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 16px; padding: 16px;
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 10px; transition: box-shadow 0.2s; cursor: pointer;
+    }
+    .result-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+    .rc-thumb {
+      width: 54px; height: 54px; border-radius: 11px; flex-shrink: 0;
+    }
+    .rct1 { background: linear-gradient(135deg,#F5D5D8,#E0A0B0); }
+    .rct2 { background: linear-gradient(135deg,#C8C0E0,#A098C8); }
+    .rct3 { background: linear-gradient(135deg,#F0DEB5,#E0C080); }
+    .rc-info { flex: 1; min-width: 0; }
+    .rc-info h4 { font-size: 0.875rem; font-weight: 600; margin-bottom: 2px; }
+    .rc-info p { font-size: 0.72rem; color: var(--gray); }
+    .rc-price { font-size: 0.95rem; font-weight: 700; flex-shrink: 0; }
+
+    /* ── VIBE ── */
+    .vibe-wrap {
+      background: var(--offblack); color: white;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .vibe-inner {
+      max-width: 1200px; margin: 0 auto; padding: 100px 56px;
+    }
+    .vibe-top {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+      margin-bottom: 56px; align-items: end;
+    }
+    #vibe .label { color: #E88090; }
+    #vibe .label::before { background: #E88090; }
+    #vibe h2 em { color: #E88090; }
+    #vibe .sub { color: #777; max-width: 380px; }
+
+    .vibe-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .vibe-pill {
+      padding: 7px 16px; border-radius: 100px; font-size: 0.8rem; font-weight: 400;
+      cursor: pointer; transition: all 0.2s;
+      border: 1.5px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.5);
+    }
+    .vibe-pill.on { background: var(--red); border-color: var(--red); color: white; cursor: default; }
+
+    .btn-connect {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; background: var(--red); color: white; border: none;
+      border-radius: 100px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 28px;
+    }
+    .btn-connect:hover { background: var(--red-dark); }
+
+    .rec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .rec-card {
+      border-radius: 16px; overflow: hidden; position: relative; cursor: pointer;
+    }
+    .rec-inner { aspect-ratio: 2/3; position: relative; }
+    .rec-bg { width: 100%; height: 100%; }
+    .rb1 { background: linear-gradient(160deg,#3D2028,#8B3040); }
+    .rb2 { background: linear-gradient(160deg,#1A1A30,#2D2D5E); }
+    .rb3 { background: linear-gradient(160deg,#2A1A2E,#5E2A72); }
+    .rb4 { background: linear-gradient(160deg,#302018,#705030); }
+    .rb5 { background: linear-gradient(160deg,#1C2A1C,#2E4A2E); }
+    .rb6 { background: linear-gradient(160deg,#1A1E2E,#2A304E); }
+    .rec-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      padding: 24px 12px 12px;
+    }
+    .rec-match { font-size: 0.62rem; font-weight: 700; color: #4ADE80; letter-spacing: 0.5px; margin-bottom: 3px; }
+    .rec-name { font-size: 0.78rem; font-weight: 600; color: white; }
+    .rec-price { font-size: 0.68rem; color: rgba(255,255,255,0.55); margin-top: 1px; }
+    .rec-save {
+      position: absolute; top: 10px; right: 10px;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
+      border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 0.8rem;
+      transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+    }
+    .rec-save:hover { background: var(--red); color: white; }
+
+    /* ── TRY ON ── */
+    #tryon { background: var(--cream); }
+    #tryon .section-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+    .tryon-desc { margin-top: 24px; }
+    .tryon-step {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 18px 0; border-bottom: 1px solid var(--border);
+    }
+    .tryon-step:last-child { border-bottom: none; }
+    .ts-icon {
+      font-size: 1.1rem; width: 36px; flex-shrink: 0;
+      opacity: 0.6; margin-top: 1px;
+    }
+    .ts-text h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 3px; }
+    .ts-text p { font-size: 0.78rem; color: var(--gray); line-height: 1.55; }
+
+    /* Canvas */
+    .canvas {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 24px; overflow: hidden;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.07);
+    }
+    .canvas-head {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .canvas-head span { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray); }
+    .canvas-live { display: flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 600; color: #22C55E; }
+    .canvas-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #22C55E; }
+    .canvas-body { padding: 20px; }
+    .canvas-slots {
+      display: grid; grid-template-columns: 1fr 32px 1fr; gap: 8px;
+      align-items: center; margin-bottom: 16px;
+    }
+    .slot {
+      border: 1.5px solid var(--border); border-radius: 16px;
+      aspect-ratio: 3/4; overflow: hidden; cursor: pointer;
+      transition: border-color 0.2s; position: relative;
+    }
+    .slot:hover { border-color: var(--red); }
+    .slot-filled { width: 100%; height: 100%; background: linear-gradient(160deg,#EDD8C8,#D8C0A8); position: relative; }
+    .slot-icon-center {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-58%);
+      opacity: 0.25;
+    }
+    .slot-tag {
+      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.45); color: white; font-size: 0.62rem; font-weight: 600;
+      padding: 3px 10px; border-radius: 100px; white-space: nowrap; backdrop-filter: blur(4px);
+    }
+    .slot-empty {
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 6px;
+    }
+    .slot-empty span { font-size: 1.6rem; opacity: 0.25; }
+    .slot-empty p { font-size: 0.7rem; color: var(--gray); text-align: center; padding: 0 12px; line-height: 1.4; }
+    .slot-arrow { text-align: center; font-size: 1rem; color: var(--gray); }
+
+    .canvas-score {
+      background: var(--light); border-radius: 12px; padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+    }
+    .canvas-score span { font-size: 0.8rem; font-weight: 500; color: var(--gray); }
+    .canvas-score strong { font-size: 0.88rem; font-weight: 700; color: #22C55E; }
+
+    .btn-generate {
+      width: 100%; padding: 13px; border: none; border-radius: 100px;
+      background: var(--black); color: white;
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
+    .btn-generate:hover { background: var(--red); transform: translateY(-1px); }
+    .btn-generate:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+    /* ── TRY-ON UI ── */
+    .tryon-step-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+    .tryon-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+    .tryon-tab { padding: 5px 14px; border: 1.5px solid #ddd; border-radius: 100px; background: none; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; cursor: pointer; transition: all 0.15s; }
+    .tryon-tab.active { background: var(--black); border-color: var(--black); color: white; }
+    .tryon-drop { border: 1.5px dashed #ccc; border-radius: 10px; padding: 18px 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: border-color 0.2s; text-align: center; }
+    .tryon-drop:hover { border-color: var(--black); }
+    .tryon-drop.has-file { border-color: var(--black); border-style: solid; }
+    .tryon-drop span { font-size: 0.78rem; color: #888; }
+    .tryon-drop img { width: 100%; max-height: 140px; object-fit: contain; border-radius: 6px; }
+    .model-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .model-card { border-radius: 8px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: border-color 0.15s; aspect-ratio: 2/3; position: relative; }
+    .model-card img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .model-card.selected { border-color: var(--red); }
+    .model-card .model-name { position: absolute; bottom: 0; left: 0; right: 0; font-size: 0.65rem; text-align: center; padding: 4px 0; background: rgba(255,255,255,0.85); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--black); color: white; padding: 60px 56px 36px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top { display: flex; justify-content: space-between; margin-bottom: 48px; flex-wrap: wrap; gap: 36px; }
+    .footer-brand .logo { font-size: 1.5rem; display: block; margin-bottom: 10px; }
+    .footer-brand p { font-size: 0.8rem; color: #555; max-width: 200px; line-height: 1.65; }
+    .footer-links { display: flex; gap: 56px; flex-wrap: wrap; }
+    .footer-col h4 { font-size: 0.67rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #444; margin-bottom: 14px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .footer-col a { font-size: 0.83rem; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
+    .footer-col a:hover { color: white; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    }
+    .footer-bottom p { font-size: 0.72rem; color: #3A3A3A; }
+    .footer-bottom a { color: #E88090; text-decoration: none; }
+
+    /* Real thumbnails from API */
+    .rc-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 11px; display: block; }
+    .result-card a { text-decoration: none; color: inherit; display: contents; }
+    .result-card { cursor: pointer; }
+    .result-card:hover .rc-info h4 { color: var(--red); }
+
+    /* Loading skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, var(--light) 25%, var(--border) 50%, var(--light) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.3s infinite;
+      border-radius: 10px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    .skeleton-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px; margin-bottom: 10px;
+      border: 1px solid var(--border); border-radius: 16px;
+    }
+
+    /* Show more button */
+    .btn-show-more {
+      width: 100%; padding: 11px; margin-top: 4px;
+      background: transparent; border: 1.5px solid var(--border);
+      border-radius: 100px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.83rem; font-weight: 500; color: var(--gray);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-show-more:hover { border-color: var(--black); color: var(--black); }
+
+    /* Error state */
+    .find-error {
+      color: var(--red); font-size: 0.85rem; padding: 20px;
+      background: rgba(230,0,35,0.05); border-radius: 12px;
+      border: 1px solid rgba(230,0,35,0.15);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      nav { padding: 0 28px; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; height: auto; }
+      .hero-right { height: 480px; border-top: 1px solid var(--border); }
+      .section { padding: 72px 28px; }
+      #find .section-inner, #tryon .section-inner { grid-template-columns: 1fr; gap: 40px; }
+      .vibe-inner { padding: 72px 28px; }
+      .vibe-top { grid-template-columns: 1fr; gap: 36px; }
+      .rec-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { padding: 48px 28px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">vibe<em>pin</em></a>
+    <ul class="nav-links">
+      <li><a href="#find">Find</a></li>
+      <li><a href="#vibe">Match</a></li>
+      <li><a href="#tryon">Wear</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn btn-red" id="nav-pinterest-btn" onclick="connectPinterest()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="white" style="vertical-align:-2px;margin-right:6px;"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+        Connect Pinterest
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <h1>Shop the<br/><em>look</em> you<br/>saved.</h1>
+      <p class="hero-sub">Paste a Pinterest pin or a screenshot and get real shopping links. Shaped by your taste and vibe, get recommendations from us. And most importantly, try it all on before you buy!</p>
+      <a href="#find" class="hero-cta">Start with finding an item</a>
+    </div>
+
+    <div class="hero-right">
+      <div class="pin-board">
+        <div class="pin-col">
+          <div class="pin"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$129 · Revolve</div><div class="pin-found">FOUND</div></div>
+          <div class="pin"><img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$67 · H&amp;M</div></div>
+          <div class="pin"><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$42 · Zara</div></div>
+          <div class="pin"><img src="https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$310 · Arket</div></div>
+        </div>
+        <div class="pin-col">
+          <div class="pin"><img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$89 · Zara</div></div>
+          <div class="pin"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$195 · ASOS</div><div class="pin-found">FOUND</div></div>
+          <div class="pin"><img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$54 · H&amp;M</div></div>
+          <div class="pin"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$147 · COS</div></div>
+        </div>
+        <div class="pin-col">
+          <div class="pin"><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$280 · Mango</div><div class="pin-found">FOUND</div></div>
+          <div class="pin"><img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$210 · Net-a-Porter</div></div>
+          <div class="pin"><img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$88 · &amp; Other Stories</div></div>
+          <div class="pin"><img src="https://images.unsplash.com/photo-1550614000-4895a10e1bfd?w=360&fit=crop" style="width:100%;display:block;" alt="" /><div class="pin-price">$178 · Mango</div><div class="pin-found">FOUND</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIND -->
+  <div id="find" class="section">
+    <div class="section-inner">
+      <div>
+        <div class="label">Find</div>
+        <h2>Find your item</h2>
+        <p class="sub">Drop a screenshot or paste a Pinterest pin URL. We can identify any item — dress, bag, earrings — and return real, shoppable links.</p>
+
+        <!-- Hidden file input -->
+        <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" style="display:none;" />
+
+        <div class="upload-zone" id="upload-zone">
+          <div class="upload-icon">📎</div>
+          <h3>Drop your screenshot here</h3>
+          <p>PNG, JPG or WEBP · up to 10MB</p>
+          <button class="btn-upload" id="browse-btn">Browse files</button>
+          <div class="or-row">or paste a link</div>
+          <div class="url-row">
+            <input class="url-input" id="url-input" type="text" placeholder="pinterest.com/pin/..." />
+            <button class="btn-go" id="url-go">Go</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="results-panel">
+        <div class="results-label">
+          Results <span id="results-count">— paste a link or drop a screenshot</span>
+        </div>
+        <div id="results-list">
+          <!-- Populated by JS -->
+          <div style="color:var(--gray);font-size:0.85rem;padding:32px 0;text-align:center;border:1.5px dashed var(--border);border-radius:16px;">
+            Your results will appear here
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIBE -->
+  <div class="vibe-wrap" id="vibe">
+    <div class="vibe-inner">
+      <div class="vibe-top">
+        <div>
+          <div class="label" id="vibe">match</div>
+          <h2>Match your <em>aesthetic</em></h2>
+          <p class="sub" style="margin-top:16px;">Connect your account and let us analyse your boards, saves, and history to match your vibe and style, and recommend what you will love!</p>
+          <button id="vibe-pinterest-btn" onclick="connectAndAnalyse()" style="margin-top:28px;display:flex;align-items:center;gap:8px;padding:12px 24px;background:var(--red);color:white;border:none;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:background 0.2s;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+            Analyse my profile
+          </button>
+          <p style="font-size:0.72rem;color:#555;margin-top:14px;margin-bottom:6px;">or enter your username</p>
+          <div class="url-row">
+            <input class="url-input" id="vibe-input" type="text"
+              placeholder="pinterest.com/yourusername"
+              style="background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.12);color:white;" />
+            <button class="btn-go" id="vibe-go-btn" onclick="vibeAnalyse()">Analyse</button>
+          </div>
+          <p id="vibe-status" style="font-size:0.78rem;color:#555;margin-top:12px;min-height:1.2em;"></p>
+        </div>
+
+        <div>
+          <p style="font-size:0.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:14px;">Your detected vibes</p>
+          <div class="vibe-pills" id="vibe-pills">
+            <span class="vibe-pill">Soft girl</span>
+            <span class="vibe-pill">Quiet luxury</span>
+            <span class="vibe-pill">Romantic</span>
+            <span class="vibe-pill">Dark academia</span>
+            <span class="vibe-pill">Y2K</span>
+            <span class="vibe-pill">Coastal</span>
+            <span class="vibe-pill">Minimalist</span>
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size:0.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:16px;">Recommended for you</p>
+      <div class="rec-grid" id="rec-grid">
+        <div class="rec-card"><div class="rec-inner"><div class="rec-bg rb1"></div><div class="rec-overlay"><div class="rec-match">✦ Analyse to unlock</div><div class="rec-name">Satin Slip Dress</div><div class="rec-price">$112 · Revolve</div></div></div><button class="rec-save">♡</button></div>
+        <div class="rec-card"><div class="rec-inner"><div class="rec-bg rb2"></div><div class="rec-overlay"><div class="rec-match">✦ Analyse to unlock</div><div class="rec-name">Cashmere Wrap Coat</div><div class="rec-price">$340 · Net-a-Porter</div></div></div><button class="rec-save">♡</button></div>
+        <div class="rec-card"><div class="rec-inner"><div class="rec-bg rb3"></div><div class="rec-overlay"><div class="rec-match">✦ Analyse to unlock</div><div class="rec-name">Ruched Midi Skirt</div><div class="rec-price">$78 · ASOS</div></div></div><button class="rec-save">♡</button></div>
+        <div class="rec-card"><div class="rec-inner"><div class="rec-bg rb4"></div><div class="rec-overlay"><div class="rec-match">✦ Analyse to unlock</div><div class="rec-name">Relaxed Linen Set</div><div class="rec-price">$165 · Arket</div></div></div><button class="rec-save">♡</button></div>
+        <div class="rec-card"><div class="rec-inner"><div class="rec-bg rb5"></div><div class="rec-overlay"><div class="rec-match">✦ Analyse to unlock</div><div class="rec-name">Structured Mini Bag</div><div class="rec-price">$220 · Mango</div></div></div><button class="rec-save">♡</button></div>
+        <div class="rec-card"><div class="rec-inner"><div class="rec-bg rb6"></div><div class="rec-overlay"><div class="rec-match">✦ Analyse to unlock</div><div class="rec-name">Knit Ballet Flats</div><div class="rec-price">$94 · Zara</div></div></div><button class="rec-save">♡</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRY ON -->
+  <div id="tryon" class="section">
+    <div class="section-inner">
+      <div>
+        <div class="label">wear</div>
+        <h2>See it on <em>you</em><br/>before you buy.</h2>
+        <p class="sub">Not sure if it suits you? Upload a photo and pick any saved piece — we'll show you exactly how it looks.</p>
+
+        <div class="tryon-desc">
+          <div class="tryon-step">
+            <div class="ts-icon">📸</div>
+            <div class="ts-text"><h4>Choose a person</h4><p>Upload your own photo or pick one of our models.</p></div>
+          </div>
+          <div class="tryon-step">
+            <div class="ts-icon">👗</div>
+            <div class="ts-text"><h4>Add a garment</h4><p>Upload a clothing photo or paste a link.</p></div>
+          </div>
+          <div class="tryon-step">
+            <div class="ts-icon">✨</div>
+            <div class="ts-text"><h4>See the result</h4><p>Realistic AI preview in seconds.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="canvas">
+        <div class="canvas-head">
+          <span>Virtual try-on</span>
+          <div class="canvas-live"><div class="canvas-live-dot"></div>AI ready</div>
+        </div>
+        <div class="canvas-body">
+
+          <!-- Step 1: Person -->
+          <div class="tryon-step-label">1 · Choose a person</div>
+          <div class="tryon-tabs" id="person-tabs">
+            <button class="tryon-tab active" onclick="switchPersonTab('upload')">Upload photo</button>
+            <button class="tryon-tab" onclick="switchPersonTab('model')">Use a model</button>
+          </div>
+
+          <div id="person-upload-panel">
+            <div class="tryon-drop" id="person-drop" onclick="document.getElementById('person-file').click()">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span id="person-drop-label">Click to upload your photo</span>
+            </div>
+            <input type="file" id="person-file" accept="image/*" style="display:none" onchange="handlePersonFile(this.files[0])">
+          </div>
+
+          <div id="person-model-panel" style="display:none">
+            <div class="model-grid" id="model-grid">
+              <div style="color:#888;font-size:0.8rem;padding:8px 0;">Loading models…</div>
+            </div>
+          </div>
+
+          <!-- Step 2: Garment -->
+          <div class="tryon-step-label" style="margin-top:18px;">2 · Add a garment</div>
+          <div class="tryon-tabs" id="garment-tabs">
+            <button class="tryon-tab active" onclick="switchGarmentTab('upload')">Upload photo</button>
+            <button class="tryon-tab" onclick="switchGarmentTab('url')">Paste URL</button>
+          </div>
+
+          <div id="garment-upload-panel">
+            <div class="tryon-drop" id="garment-drop" onclick="document.getElementById('garment-file').click()">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
+              <span id="garment-drop-label">Click to upload garment photo</span>
+            </div>
+            <input type="file" id="garment-file" accept="image/*" style="display:none" onchange="handleGarmentFile(this.files[0])">
+          </div>
+
+          <div id="garment-url-panel" style="display:none">
+            <div class="url-row" style="margin-top:8px;">
+              <input class="url-input" id="garment-url-input" type="text" placeholder="https://…/item.jpg" style="flex:1;">
+            </div>
+          </div>
+
+          <!-- Generate -->
+          <p id="tryon-status" style="font-size:0.78rem;color:#888;margin:10px 0 0;min-height:16px;"></p>
+          <button class="btn-generate" id="tryon-btn" onclick="runTryon()" style="margin-top:10px;width:100%;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Generate try-on
+          </button>
+
+          <!-- Result -->
+          <div id="tryon-result" style="display:none;margin-top:18px;">
+            <img id="tryon-result-img" src="" alt="Try-on result" style="width:100%;height:auto;border-radius:10px;display:block;">
+            <a id="tryon-download" href="" download="vibepin-tryon.jpg" target="_blank" style="display:block;text-align:center;margin-top:8px;font-size:0.78rem;color:#888;text-decoration:underline;">Open full size ↗</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POLICY MODAL -->
+  <div id="policy-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);overflow-y:auto;">
+    <div style="max-width:640px;margin:60px auto 60px;background:var(--cream);border-radius:24px;padding:48px;position:relative;">
+      <button onclick="document.getElementById('policy-modal').style.display='none'" style="position:absolute;top:20px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--gray);">×</button>
+      <div class="label">legal</div>
+      <h2 style="margin-bottom:24px;">Privacy &amp; AI <em>Policy</em></h2>
+
+      <div style="font-size:0.88rem;line-height:1.85;color:#444;display:flex;flex-direction:column;gap:20px;">
+        <div>
+          <strong style="color:var(--black);display:block;margin-bottom:4px;">We don't store your images</strong>
+          Photos you upload for virtual try-on or style analysis are processed in memory and discarded immediately after. We never save, log, or retain any images you submit.
+        </div>
+        <div>
+          <strong style="color:var(--black);display:block;margin-bottom:4px;">AI-generated results are not perfect</strong>
+          All results — product matches, style recommendations, and try-on previews — are generated by AI and may be inaccurate, incomplete, or not reflect real product availability. Use them as inspiration, not as a guarantee.
+        </div>
+        <div>
+          <strong style="color:var(--black);display:block;margin-bottom:4px;">Pinterest profile analysis</strong>
+          When you enter a Pinterest username, we fetch publicly visible pins from that profile to analyse your aesthetic. We only read public data and do not store your Pinterest credentials or profile information.
+        </div>
+        <div>
+          <strong style="color:var(--black);display:block;margin-bottom:4px;">No account, no tracking</strong>
+          vibepin does not require an account. We do not use cookies for tracking, sell your data to third parties, or build profiles on our users.
+        </div>
+        <div>
+          <strong style="color:var(--black);display:block;margin-bottom:4px;">Third-party services</strong>
+          We use third-party AI APIs to power our features. Your image data may be transiently processed by these services solely to generate results — refer to their respective privacy policies for details.
+        </div>
+        <div>
+          <strong style="color:var(--black);display:block;margin-bottom:4px;">Not affiliated with Pinterest</strong>
+          vibepin is an independent project and is not affiliated with, endorsed by, or sponsored by Pinterest, Inc.
+        </div>
+        <div style="font-size:0.78rem;color:var(--gray);border-top:1px solid var(--border);padding-top:16px;">
+          Last updated April 2026. Questions? This is a demo project — features are provided as-is with no warranty.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="logo">vibe<em>pin</em></a>
+          <p>Find it. Match it. Wear it.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Features</h4>
+            <ul>
+              <li><a href="#find">Find</a></li>
+              <li><a href="#vibe">Match</a></li>
+              <li><a href="#tryon">Try On</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#" onclick="document.getElementById('policy-modal').style.display='block';return false;">Privacy &amp; AI Policy</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 vibepin</p>
+        <p>Not affiliated with Pinterest, Inc. &nbsp;·&nbsp; <a href="#" onclick="document.getElementById('policy-modal').style.display='block';return false;">Privacy &amp; AI Policy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // vibe pills are display-only
+
+    // ── Policy modal close on backdrop click ──────────────────────────────
+    document.getElementById('policy-modal').addEventListener('click', function(e) {
+      if (e.target === this) this.style.display = 'none';
+    });
+
+    // ── Pinterest OAuth ────────────────────────────────────────────────────
+    let _pinterestUsername = localStorage.getItem('pinterest_username') || '';
+
+    // On load: if we were redirected back with a username, store it
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const u = params.get('pinterest_username');
+      if (u) {
+        _pinterestUsername = u;
+        localStorage.setItem('pinterest_username', u);
+        history.replaceState({}, '', '/');
+      }
+    })();
+
+    // Listen for popup postMessage result
+    window.addEventListener('message', function(e) {
+      if (e.origin !== window.location.origin) return;
+      if (e.data?.type !== 'pinterest_auth') return;
+      if (e.data.error) { alert(e.data.error); return; }
+      _pinterestUsername = e.data.username;
+      localStorage.setItem('pinterest_username', _pinterestUsername);
+      updateNavForConnectedUser();
+      document.getElementById('vibe').scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => vibeAnalyse(_pinterestUsername), 500);
+    });
+
+    function updateNavForConnectedUser() {
+      if (!_pinterestUsername) return;
+      const btn = document.getElementById('nav-pinterest-btn');
+      if (btn) {
+        btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="white" style="vertical-align:-2px;margin-right:6px;"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg> @${_pinterestUsername}`;
+        btn.onclick = () => {
+          if (confirm('Disconnect Pinterest?')) {
+            localStorage.removeItem('pinterest_username');
+            _pinterestUsername = '';
+            location.reload();
+          }
+        };
+      }
+    }
+
+    function connectPinterest() {
+      showComingSoonToast();
+    }
+
+    function connectAndAnalyse() {
+      if (_pinterestUsername) {
+        vibeAnalyse(_pinterestUsername);
+      } else {
+        showComingSoonToast();
+      }
+    }
+
+    function showComingSoonToast() {
+      const existing = document.getElementById('coming-soon-toast');
+      if (existing) { existing.remove(); }
+      const toast = document.createElement('div');
+      toast.id = 'coming-soon-toast';
+      toast.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--black);color:white;padding:14px 28px;border-radius:100px;font-size:0.85rem;font-weight:500;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.25);pointer-events:none;transition:opacity 0.4s;';
+      toast.textContent = '✦ Pinterest login coming soon — use the username field below for now';
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 400); }, 3000);
+    }
+
+    // On page load, update nav if already connected
+    updateNavForConnectedUser();
+
+    // ── Vibe / Match ───────────────────────────────────────────────────────
+    document.getElementById('vibe-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') vibeAnalyse();
+    });
+
+    async function vibeAnalyse(prefilledUsername) {
+      const input  = document.getElementById('vibe-input');
+      const btn    = document.getElementById('vibe-go-btn');
+      const status = document.getElementById('vibe-status');
+      const username = prefilledUsername || (input.value || '').trim();
+      if (!username) return;
+      if (prefilledUsername) input.value = prefilledUsername;
+
+      btn.disabled = true;
+      btn.textContent = '…';
+      status.textContent = 'Analysing your Pinterest style… this may take up to 30 seconds.';
+
+      try {
+        // 1. Analyse pins
+        const aRes = await fetch(`${API}/api/vibe/analyze?username=${encodeURIComponent(username)}`);
+        if (!aRes.ok) {
+          const err = await aRes.json();
+          throw new Error(err.detail || 'Analysis failed');
+        }
+        const profile = await aRes.json();
+
+        renderVibePills(profile.scores, profile.top_styles);
+        status.textContent = `Style found! Your top aesthetic: ${profile.top_styles[0]}`;
+
+        // 2. Fetch recommendations
+        renderRecLoading();
+        const rRes = await fetch(`${API}/api/vibe/recommend?username=${encodeURIComponent(username)}`);
+        if (!rRes.ok) throw new Error('Recommendations failed');
+        const { results } = await rRes.json();
+        renderRecGrid(results, profile.scores);
+
+      } catch (err) {
+        status.textContent = `Error: ${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Analyse';
+      }
+    }
+
+    function renderVibePills(scores, topStyles) {
+      const container = document.getElementById('vibe-pills');
+      const top10 = topStyles.slice(0, 10);
+      // Normalize top-10 scores so they sum to 100%
+      const rawScores = top10.map(n => scores[n] ?? 0);
+      const total = rawScores.reduce((a, b) => a + b, 0) || 1;
+      const pcts = rawScores.map(s => Math.round(s / total * 100));
+      // Fix rounding so they sum exactly to 100
+      const diff = 100 - pcts.reduce((a, b) => a + b, 0);
+      if (pcts.length) pcts[0] += diff;
+      container.innerHTML = top10.map((name, i) => `
+        <span class="vibe-pill on" title="${pcts[i]}% match">
+          ${escHtml(name)} <small style="opacity:0.7">${pcts[i]}%</small>
+        </span>`).join('');
+    }
+
+    function renderRecLoading() {
+      document.getElementById('rec-grid').innerHTML = [1,2,3,4,5,6].map(() => `
+        <div class="rec-card">
+          <div class="rec-inner">
+            <div class="rec-bg" style="background:var(--offblack);width:100%;height:100%;"></div>
+            <div class="rec-overlay">
+              <div class="skeleton" style="height:10px;width:50%;margin-bottom:6px;border-radius:4px;"></div>
+              <div class="skeleton" style="height:13px;width:70%;margin-bottom:4px;border-radius:4px;"></div>
+              <div class="skeleton" style="height:10px;width:40%;border-radius:4px;"></div>
+            </div>
+          </div>
+        </div>`).join('');
+    }
+
+    let _recResults = [];
+
+    function recCard(r) {
+      return `<a href="${escHtml(r.link)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+        <div class="rec-card">
+          <div class="rec-inner">
+            ${r.thumbnail
+              ? `<img src="${escHtml(r.thumbnail)}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />`
+              : `<div class="rec-bg rb1"></div>`}
+            <div class="rec-overlay">
+              <div class="rec-name">${escHtml(r.title)}</div>
+              <div class="rec-price">${r.price ? escHtml(r.price) : ''}${r.source ? ' · ' + escHtml(r.source) : ''}</div>
+            </div>
+          </div>
+        </div>
+      </a>`;
+    }
+
+    function renderRecGrid(results, scores) {
+      _recResults = results;
+      const grid = document.getElementById('rec-grid');
+      if (!results.length) {
+        grid.innerHTML = `<p style="color:#555;font-size:0.85rem;grid-column:1/-1;padding:24px 0;">No recommendations found — try reconnecting your account.</p>`;
+        return;
+      }
+      let shown = 6;
+      grid.innerHTML = results.slice(0, shown).map(recCard).join('');
+
+      function attachShowMore() {
+        const remaining = results.length - shown;
+        if (remaining <= 0) return;
+        const btn = document.createElement('button');
+        btn.className = 'btn-show-more';
+        btn.style.gridColumn = '1 / -1';
+        btn.textContent = `Show more`;
+        btn.addEventListener('click', () => {
+          grid.removeChild(btn);
+          const next = results.slice(shown, shown + 6);
+          grid.insertAdjacentHTML('beforeend', next.map(recCard).join(''));
+          shown += 6;
+          attachShowMore();
+        });
+        grid.appendChild(btn);
+      }
+      attachShowMore();
+    }
+
+    // ── Try-On ─────────────────────────────────────────────────────────────
+    const API = window.location.origin;
+
+    let _personFile = null;
+    let _personModelId = null;
+    let _garmentFile = null;
+
+    function switchPersonTab(tab) {
+      document.querySelectorAll('#person-tabs .tryon-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('person-upload-panel').style.display = tab === 'upload' ? '' : 'none';
+      document.getElementById('person-model-panel').style.display  = tab === 'model'  ? '' : 'none';
+      if (tab === 'model') loadModels();
+    }
+
+    function switchGarmentTab(tab) {
+      document.querySelectorAll('#garment-tabs .tryon-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('garment-upload-panel').style.display = tab === 'upload' ? '' : 'none';
+      document.getElementById('garment-url-panel').style.display    = tab === 'url'    ? '' : 'none';
+    }
+
+    function handlePersonFile(file) {
+      if (!file) return;
+      _personFile = file;
+      _personModelId = null;
+      const drop = document.getElementById('person-drop');
+      drop.classList.add('has-file');
+      const reader = new FileReader();
+      reader.onload = e => {
+        drop.innerHTML = `<img src="${e.target.result}" alt=""><span>${escHtml(file.name)}</span>`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleGarmentFile(file) {
+      if (!file) return;
+      _garmentFile = file;
+      const drop = document.getElementById('garment-drop');
+      drop.classList.add('has-file');
+      const reader = new FileReader();
+      reader.onload = e => {
+        drop.innerHTML = `<img src="${e.target.result}" alt=""><span>${escHtml(file.name)}</span>`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function loadModels() {
+      const grid = document.getElementById('model-grid');
+      if (grid.dataset.loaded) return;
+      grid.dataset.loaded = '1';
+      try {
+        const res = await fetch(`${API}/api/tryon/models`);
+        const { models } = await res.json();
+        grid.innerHTML = models.map(m => `
+          <div class="model-card" id="mc-${m.id}" onclick="selectModel('${m.id}','${m.url}')">
+            <img src="${escHtml(m.thumbnail)}" alt="${escHtml(m.label)}" loading="lazy">
+            <div class="model-name">${escHtml(m.label)}</div>
+          </div>`).join('');
+      } catch {
+        grid.innerHTML = '<p style="color:#888;font-size:0.78rem;">Could not load models.</p>';
+      }
+    }
+
+    function selectModel(id, url) {
+      document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('mc-' + id).classList.add('selected');
+      _personModelId = id;
+      _personFile = null;
+    }
+
+    async function runTryon() {
+      const status = document.getElementById('tryon-status');
+      const btn    = document.getElementById('tryon-btn');
+      const result = document.getElementById('tryon-result');
+
+      // Determine person source
+      const personUploadVisible = document.getElementById('person-upload-panel').style.display !== 'none';
+      const garmentUploadVisible = document.getElementById('garment-upload-panel').style.display !== 'none';
+
+      if (personUploadVisible && !_personFile) { status.textContent = 'Please upload a person photo.'; return; }
+      if (!personUploadVisible && !_personModelId) { status.textContent = 'Please select a model.'; return; }
+
+      const garmentUrl = document.getElementById('garment-url-input').value.trim();
+      if (garmentUploadVisible && !_garmentFile) { status.textContent = 'Please upload a garment photo.'; return; }
+      if (!garmentUploadVisible && !garmentUrl)  { status.textContent = 'Please enter a garment URL.'; return; }
+
+      btn.disabled = true;
+      result.style.display = 'none';
+      status.textContent = 'Generating your try-on… this takes about 30 seconds.';
+
+      const form = new FormData();
+      if (_personFile)    form.append('person_file', _personFile);
+      if (_personModelId) form.append('person_model_id', _personModelId);
+      if (_garmentFile)   form.append('garment_file', _garmentFile);
+      if (!garmentUploadVisible && garmentUrl) form.append('garment_url', garmentUrl);
+
+      try {
+        const res = await fetch(`${API}/api/tryon/run`, { method: 'POST', body: form });
+        const data = await res.json();
+        if (!res.ok) { status.textContent = `Error: ${data.detail || 'Try-on failed.'}`; return; }
+
+        document.getElementById('tryon-result-img').src = data.result_url;
+        document.getElementById('tryon-download').href  = data.result_url;
+        result.style.display = '';
+        status.textContent = 'Done!';
+      } catch (e) {
+        status.textContent = 'Something went wrong. Please try again.';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // ── Find ───────────────────────────────────────────────────────────────
+    const PAGE = 6;
+
+    const uploadZone   = document.getElementById('upload-zone');
+    const fileInput    = document.getElementById('file-input');
+    const browseBtn    = document.getElementById('browse-btn');
+    const resultsList  = document.getElementById('results-list');
+    const resultsCount = document.getElementById('results-count');
+
+    // Always look up live — resetUploadZone() recreates these elements
+    const urlInput = () => document.getElementById('url-input');
+
+    let _allResults = [];
+
+    // ── Upload triggers ────────────────────────────────────────────────────
+    browseBtn.addEventListener('click', e => { e.stopPropagation(); fileInput.click(); });
+    fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+
+    uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.style.borderColor = 'var(--red)'; });
+    uploadZone.addEventListener('dragleave', () => { uploadZone.style.borderColor = ''; });
+    uploadZone.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadZone.style.borderColor = '';
+      if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    });
+
+    document.getElementById('url-go').addEventListener('click', handleUrl);
+    document.getElementById('url-input').addEventListener('keydown', e => { if (e.key === 'Enter') handleUrl(); });
+
+    // ── Handlers ───────────────────────────────────────────────────────────
+    async function handleFile(file) {
+      // Show local preview immediately — no need to wait for the API
+      showImagePreview(URL.createObjectURL(file));
+      const form = new FormData();
+      form.append('file', file);
+      await run(() => fetch(`${API}/api/find/upload`, { method: 'POST', body: form }));
+    }
+
+    async function handleUrl() {
+      const url = (urlInput()?.value ?? '').trim();
+      if (!url) return;
+      showLoading();
+      await run(() => fetch(`${API}/api/find/url`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      }));
+    }
+
+    async function run(fetchFn) {
+      showLoading();
+      try {
+        const res  = await fetchFn();
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.detail || `Error ${res.status}`);
+        // For URL searches the server returns the image — show it
+        if (body.image_url) showImagePreview(body.image_url);
+        renderResults(body.results, body.cached);
+      } catch (err) {
+        showError(err.message);
+      }
+    }
+
+    // ── Image preview (replaces upload zone content) ───────────────────────
+    function showImagePreview(src) {
+      uploadZone.innerHTML = `
+        <img src="${src}" alt="Searched image"
+             style="width:100%;max-height:280px;object-fit:contain;border-radius:12px;display:block;margin-bottom:16px;" />
+        <button class="btn-upload" id="reset-btn">Search a different image</button>
+      `;
+      document.getElementById('reset-btn').addEventListener('click', resetUploadZone);
+    }
+
+    function resetUploadZone() {
+      uploadZone.innerHTML = `
+        <div class="upload-icon">📎</div>
+        <h3>Drop your screenshot here</h3>
+        <p>PNG, JPG or WEBP · up to 10MB</p>
+        <button class="btn-upload" id="browse-btn">Browse files</button>
+        <div class="or-row">or paste a link</div>
+        <div class="url-row">
+          <input class="url-input" id="url-input" type="text" placeholder="pinterest.com/pin/..." />
+          <button class="btn-go" id="url-go">Go</button>
+        </div>
+      `;
+      // Re-attach events after re-render
+      document.getElementById('browse-btn').addEventListener('click', e => { e.stopPropagation(); fileInput.click(); });
+      document.getElementById('url-go').addEventListener('click', handleUrl);
+      document.getElementById('url-input').addEventListener('keydown', e => { if (e.key === 'Enter') handleUrl(); });
+      _allResults = [];
+      resultsCount.textContent = '— paste a link or drop a screenshot';
+      resultsList.innerHTML = `<div style="color:var(--gray);font-size:0.85rem;padding:32px 0;text-align:center;border:1.5px dashed var(--border);border-radius:16px;">Your results will appear here</div>`;
+    }
+
+    // ── Results rendering ──────────────────────────────────────────────────
+    function renderResults(results, cached) {
+      _allResults = results;
+
+      if (!results.length) {
+        resultsCount.textContent = 'No store links found';
+        resultsList.innerHTML = `<div style="color:var(--gray);font-size:0.85rem;padding:32px 0;text-align:center;border:1.5px dashed var(--border);border-radius:16px;">
+          Google Lens couldn't find shoppable matches. Try a cleaner crop of a single item.
+        </div>`;
+        return;
+      }
+
+      const total = results.length;
+      resultsCount.textContent = `${total} store${total > 1 ? 's' : ''} found${cached ? ' · cached' : ''}`;
+      renderPage(0);
+    }
+
+    function renderPage(from) {
+      const slice = _allResults.slice(0, from + PAGE);
+      const hasMore = slice.length < _allResults.length;
+
+      resultsList.innerHTML =
+        slice.map(r => resultCardHtml(r)).join('') +
+        (hasMore ? `<button class="btn-show-more" id="show-more-btn">Show more</button>` : '');
+
+      if (hasMore) {
+        document.getElementById('show-more-btn').addEventListener('click', () => renderPage(from + PAGE));
+      }
+    }
+
+    function resultCardHtml(r) {
+      return `
+        <a href="${r.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block;margin-bottom:10px;">
+          <div class="result-card" style="margin-bottom:0;">
+            <div class="rc-thumb">
+              ${r.thumbnail
+                ? `<img src="${escHtml(r.thumbnail)}" alt="${escHtml(r.title)}" />`
+                : `<div style="width:100%;height:100%;background:var(--light);border-radius:11px;"></div>`}
+            </div>
+            <div class="rc-info">
+              <h4>${escHtml(r.title)}</h4>
+              <p>${escHtml(r.source)}</p>
+            </div>
+            <div class="rc-price">${r.price ? escHtml(r.price) : '—'}</div>
+          </div>
+        </a>`;
+    }
+
+    // ── Loading & error ────────────────────────────────────────────────────
+    function showLoading() {
+      resultsCount.textContent = 'Searching…';
+      resultsList.innerHTML = [1,2,3].map(() => `
+        <div class="skeleton-card">
+          <div class="skeleton" style="width:54px;height:54px;flex-shrink:0;border-radius:11px;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
+            <div class="skeleton" style="height:14px;width:60%;"></div>
+            <div class="skeleton" style="height:11px;width:40%;"></div>
+          </div>
+          <div class="skeleton" style="width:40px;height:16px;border-radius:6px;"></div>
+        </div>`).join('');
+    }
+
+    function showError(msg) {
+      resultsCount.textContent = 'Something went wrong';
+      resultsList.innerHTML = `<div class="find-error">${escHtml(msg)}</div>`;
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
+
+</body>
+</html>
