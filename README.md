@@ -32,4 +32,4 @@ Shop the look you saved. Find it. Match it. Wear it.
 
 ## Stack
 
-Python · FastAPI · CLIP · Replicate IDM-VTON · SerpAPI
+Python, FastAPI, CLIP, Replicate IDM-VTON, SerpAPI
